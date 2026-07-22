@@ -6,7 +6,7 @@ print("DataScope ETL Test\n")
 
 # Extract
 client = AdzunaClient()
-raw_data = client.fetch_jobs()
+raw_data = client.fetch_multiple_pages(pages=10)
 
 print(f"✓ Extracted {len(raw_data['results'])} jobs")
 

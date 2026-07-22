@@ -21,7 +21,7 @@ class AdzunaClient:
         # Reuse the same HTTP connection for better performance.
         self.session = requests.Session()
 
-    def fetch_jobs(self):
+    def fetch_jobs(self, page: int = 1):
         """Fetch job listings from the Adzuna API.
 
         Returns:
@@ -35,7 +35,7 @@ class AdzunaClient:
         """
 
         url = (
-            f"{self.base_url}/jobs/in/search/1"
+            f"{self.base_url}/jobs/in/search/{page}"
             f"?app_id={self.app_id}"
             f"&app_key={self.api_key}"
         )
@@ -56,4 +56,27 @@ class AdzunaClient:
 
         except requests.exceptions.RequestException as error:
             raise requests.exceptions.RequestException(f"Unexpected request error: {error}")
+        
+    def fetch_multiple_pages(self, pages: int = 10):
+        """
+    Fetch multiple pages of job listings from the Adzuna API.
 
+    Args:
+        pages (int): Number of pages to fetch.
+
+    Returns:
+        dict: A single dictionary containing all jobs under the
+              "results" key.
+        """
+
+        all_jobs = []
+
+        for page in range(1, pages + 1):
+
+            page_data = self.fetch_jobs(page=page)
+
+            all_jobs.extend(page_data["results"])
+
+        return {
+        "results": all_jobs
+        }
