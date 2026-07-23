@@ -1,5 +1,4 @@
 --dataset summary
-
 SELECT
 
     COUNT(*) AS total_jobs,
